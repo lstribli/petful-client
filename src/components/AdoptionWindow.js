@@ -1,4 +1,5 @@
 import React, { Component } from 'react'
+import Loading from './loading'
 
 
 export default class AdoptionWindow extends Component {
@@ -66,7 +67,7 @@ export default class AdoptionWindow extends Component {
 
   render() {
 
-    if (this.state.isLoading) return <div>Loading...</div>;
+    if (this.state.isLoading) return <Loading />;
     return (
       <div className="adoptionWindow">
         <section>

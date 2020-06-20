@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-
+import Loading from './loading'
 export default class Adoption extends Component {
   state = {
     pets: [],
@@ -17,7 +17,7 @@ export default class Adoption extends Component {
 
   render() {
     // console.log('State', this.state.pets.cats)
-    if (this.state.isLoading) return <div>Loading...</div>;
+    if (this.state.isLoading) return <Loading />;
     return (
       <div className="petColumns">
         <div className="petsList">
