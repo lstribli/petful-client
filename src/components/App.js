@@ -12,13 +12,14 @@ export default class App extends React.Component {
         <div>
           <h1>Sup</h1>
           <section className="adoption">
-            <div className="animals">
-              <LandingPage />
-            </div>
+
+
+
           </section>
         </div>
 
         <main>
+          <LandingPage />
           <AdoptionWindow />
           <Adoption />
 
