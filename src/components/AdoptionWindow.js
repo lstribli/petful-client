@@ -1,13 +1,13 @@
 import React, { Component } from 'react'
+import People from './People';
 import Loading from './loading'
-
-
 export default class AdoptionWindow extends Component {
   state = {
     isLoading: true,
     pets: [],
     adoptCat: [],
-    adoptDog: []
+    adoptDog: [],
+    error: null
   }
 
   componentDidMount() {
@@ -16,8 +16,10 @@ export default class AdoptionWindow extends Component {
       method: 'GET',
     })
       .then((res) => res.json())
-      .then((data) => this.setState({ adoptDog: data, isLoading: false })
-      )
+      .then((data) => {
+        if (!data) this.setState({ error: 'There are no more dogs to adopt!' })
+        this.setState({ adoptDog: data, isLoading: false })
+      })
       .catch(error => console.log(error))
 
 
@@ -25,8 +27,10 @@ export default class AdoptionWindow extends Component {
       method: 'GET',
     })
       .then((res) => res.json())
-      .then((data) => this.setState({ adoptCat: data, isLoading: false })
-      )
+      .then((data) => {
+        if (!data) this.setState({ error: 'There are no more cats to adopt!' })
+        this.setState({ adoptCat: data, isLoading: false })
+      })
       .catch(error => console.log(error))
 
   }
@@ -39,7 +43,6 @@ export default class AdoptionWindow extends Component {
       }
     })
       .then((res) => {
-        // console.log(this.state)
         let newVar = this.state.adoptDog;
         this.setState({ adoptDog: newVar })
         window.location.reload(false)
@@ -69,35 +72,40 @@ export default class AdoptionWindow extends Component {
 
     if (this.state.isLoading) return <Loading />;
     return (
-      <div className="adoptionWindow">
-        <section>
-          <ul className="adoptThis">
-            <li>name: {this.state.adoptCat.name}</li>
-            <li>Age:{this.state.adoptCat.age} </li>
-            <li>Breed:{this.state.adoptCat.breed}</li>
-            <li>{this.state.adoptCat.description}</li>
-            <li>Gender:{this.state.adoptCat.gender} </li>
-            <img src={this.state.adoptCat.imageURL} alt="a cat"></img>
-            <li>Story:{this.state.adoptCat.story} </li>
-          </ul>
-          <button onClick={() => this.adoptCat()}>Adopt this Cat</button>
-        </section>
+      <div className="adoptionWindow-container">
+        <div className="adoptionWindow">
+          <section>
+            <ul className="adoptThis">
+              <li>name: {this.state.adoptCat.name}</li>
+              <li>Age:{this.state.adoptCat.age} </li>
+              <li>Breed:{this.state.adoptCat.breed}</li>
+              <li>{this.state.adoptCat.description}</li>
+              <li>Gender:{this.state.adoptCat.gender} </li>
+              <img src={this.state.adoptCat.imageURL} alt="a cat"></img>
+              <li>Story:{this.state.adoptCat.story} </li>
+            </ul>
+            <button onClick={() => this.adoptCat()}>Adopt this Cat</button>
+          </section>
 
-        <section>
-          <ul className="adoptThis">
-            <li>name: {this.state.adoptDog.name}</li>
-            <li>Age:{this.state.adoptDog.age} </li>
-            <li>Breed:{this.state.adoptDog.breed}</li>
-            <li>{this.state.adoptDog.description}</li>
-            <li>Gender:{this.state.adoptDog.gender} </li>
-            <img src={this.state.adoptDog.imageURL} alt="a cat"></img>
-            <li>Story:{this.state.adoptDog.story} </li>
-          </ul>
-          <button onClick={() => this.adoptDog()}>Adopt This Dog</button>
-        </section>
-
-
+          <section>
+            <ul className="adoptThis">
+              <li>name: {this.state.adoptDog.name}</li>
+              <li>Age:{this.state.adoptDog.age} </li>
+              <li>Breed:{this.state.adoptDog.breed}</li>
+              <li>{this.state.adoptDog.description}</li>
+              <li>Gender:{this.state.adoptDog.gender} </li>
+              <img src={this.state.adoptDog.imageURL} alt="a cat"></img>
+              <li>Story:{this.state.adoptDog.story} </li>
+            </ul>
+            <button onClick={() => this.adoptDog()}>Adopt This Dog</button>
+          </section>
+        </div>
+        <div className="people-container">
+          <People />
+        </div>
       </div >
+
+
 
     )
   }

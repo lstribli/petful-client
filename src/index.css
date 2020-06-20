@@ -13,7 +13,9 @@ img {
   align-items: center;
   justify-content: center;
   border: 2px solid green;
+  margin-right: 30%;
 }
+
 .adoptThis {
   list-style: none;
   margin: 20px;
@@ -73,4 +75,11 @@ img {
 }
 .loadingThing h3 {
   color: darkslateblue;
+}
+
+.people-container {
+  position: fixed;
+  right: 0;
+  top: 0;
+  width: 30%;
 }
