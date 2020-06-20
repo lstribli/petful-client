@@ -3,21 +3,13 @@ import React, { Component } from 'react'
 
 export default class AdoptionWindow extends Component {
   state = {
-    pets: [],
     isLoading: true,
+    pets: [],
     adoptCat: [],
     adoptDog: []
   }
 
   componentDidMount() {
-    fetch(`http://localhost:8000/api/pets`, {
-      method: 'GET',
-    })
-      .then((res) => res.json())
-      .then((data) => this.setState({ pets: data, isLoading: false })
-      )
-      .catch(error => console.log(error))
-
 
     fetch(`http://localhost:8000/api/pets/dogs`, {
       method: 'GET',
@@ -41,10 +33,20 @@ export default class AdoptionWindow extends Component {
   adoptDog() {
     fetch(`http://localhost:8000/api/pets/dogs`, {
       method: 'DELETE',
+      headers: {
+        'Content-Type': 'application/json',
+      }
     })
-      .then((res) => console.log(res))
+      .then((res) => {
+        // console.log(this.state)
+        let newVar = this.state.adoptDog;
+        this.setState({ adoptDog: newVar })
+        window.location.reload(false)
+      })
       .catch(error => console.log(error))
   }
+
+
 
   adoptCat() {
     fetch(`http://localhost:8000/api/pets/cats`, {
@@ -53,40 +55,44 @@ export default class AdoptionWindow extends Component {
         'Content-Type': 'application/json',
       }
     })
-      .then((res) => console.log(res))
+      .then((res) => {
+        // console.log(this.state)
+        let newVar = this.state.adoptCat;
+        this.setState({ adoptCat: newVar })
+        window.location.reload(false)
+      })
       .catch(error => console.log(error))
   }
-
-
-
-
 
   render() {
 
     if (this.state.isLoading) return <div>Loading...</div>;
     return (
-
-      <div >
-
+      <div className="adoptionWindow">
         <section>
-          {this.state.adoptCat.name}
-          {this.state.adoptCat.age}
-          {this.state.adoptCat.breed}
-          {this.state.adoptCat.description}
-          {this.state.adoptCat.gender}
-          {this.state.adoptCat.imageURL}
-          {this.state.adoptCat.story}
-          <button onClick={this.adoptCat}>Adopt this Cat</button>
+          <ul className="adoptThis">
+            <li>name: {this.state.adoptCat.name}</li>
+            <li>Age:{this.state.adoptCat.age} </li>
+            <li>Breed:{this.state.adoptCat.breed}</li>
+            <li>{this.state.adoptCat.description}</li>
+            <li>Gender:{this.state.adoptCat.gender} </li>
+            <img src={this.state.adoptCat.imageURL} alt="a cat"></img>
+            <li>Story:{this.state.adoptCat.story} </li>
+          </ul>
+          <button onClick={() => this.adoptCat()}>Adopt this Cat</button>
         </section>
+
         <section>
-          {this.state.adoptDog.name}
-          {this.state.adoptDog.age}
-          {this.state.adoptDog.breed}
-          {this.state.adoptDog.description}
-          {this.state.adoptDog.gender}
-          {this.state.adoptDog.imageURL}
-          {this.state.adoptDog.story}
-          <button onClick={this.adoptDog}>Adopt This Dog</button>
+          <ul className="adoptThis">
+            <li>name: {this.state.adoptDog.name}</li>
+            <li>Age:{this.state.adoptDog.age} </li>
+            <li>Breed:{this.state.adoptDog.breed}</li>
+            <li>{this.state.adoptDog.description}</li>
+            <li>Gender:{this.state.adoptDog.gender} </li>
+            <img src={this.state.adoptDog.imageURL} alt="a cat"></img>
+            <li>Story:{this.state.adoptDog.story} </li>
+          </ul>
+          <button onClick={() => this.adoptDog()}>Adopt This Dog</button>
         </section>
 
 

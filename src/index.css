@@ -1,0 +1,24 @@
+img {
+  max-width: 300px;
+}
+
+.adoptionWindow {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  border: 2px solid green;
+}
+.adoptThis {
+  list-style: none;
+  margin: 20px;
+}
+
+.petColumns {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+}
