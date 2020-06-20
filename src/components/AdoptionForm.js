@@ -1,19 +1,37 @@
 import React, { Component } from 'react';
+import PetItem from './PetItem';
 
 export default class Adoption extends Component {
   state = {
     pets: [],
     isLoading: true,
+    error: null
   }
   componentDidMount() {
     fetch(`http://localhost:8000/api/pets`)
       .then((res) => res.json())
-      .then((data) => this.setState({ pets: data, isLoading: false })
-      )
+      .then((data) => {
+        console.log(data)
+        data.cats.shift()
+        data.dogs.shift()
+        this.setState({ pets: data, isLoading: false })
+      
+      })
       // .then(this.state.pets.cats.filter(cat => cat === this.state.pets.cats[0]))
       .catch(error => console.log(error))
   }
 
+  generateCatItems() {
+    return this.state.pets.cats.map((cat) => {
+      return <PetItem key={cat.name} age={cat.age} breed={cat.breed} description={cat.description} gender={cat.gender} imgUrl={cat.imageURL} name={cat.name} story={cat.story} />
+    })
+  }
+
+  generateDogItems() {
+    return this.state.pets.dogs.map(dog => {
+      return <PetItem key={dog.name} age={dog.age} breed={dog.breed} description={dog.description} gender={dog.gender} imgUrl={dog.imageURL} name={dog.name} story={dog.story} />
+    })
+  }
 
   render() {
     // console.log('State', this.state.pets.cats)
@@ -21,28 +39,10 @@ export default class Adoption extends Component {
     return (
       <div className="petColumns">
         <div className="petsList">
-          {this.state.pets.cats.map((cat) => (
-            <div key={cat.name}>
-              <p>age: {cat.age}</p>
-              <p>breed: {cat.breed}</p>
-              <p>Description: {cat.description}</p>
-              <p>gender: {cat.gender}</p>
-              <img src={cat.imageURL} alt="pet"></img>
-              <p>name: {cat.name}</p>
-              <p>story: {cat.story}</p>
-            </div>))}
+          {this.generateCatItems()}
         </div>
         <div className="petsList">
-          {this.state.pets.dogs.map((dog) => (
-            <div key={dog.name}>
-              <p>age: {dog.age}</p>
-              <p>breed: {dog.breed}</p>
-              <p>Description: {dog.description}</p>
-              <p>gender: {dog.gender}</p>
-              <img src={dog.imageURL} alt="pet"></img>
-              <p>name: {dog.name}</p>
-              <p>story: {dog.story}</p>
-            </div>))}
+          {this.generateDogItems()}
         </div>
       </div>
     )
