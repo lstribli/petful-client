@@ -10,7 +10,7 @@ export default class People extends React.Component {
   }
 
   componentDidMount() {
-    fetch(`http://localhost:8000/api/people`)
+    fetch('http://localhost:8000/api/people')
       .then(people => {
         if (!people) return this.setState({ error: 'There are no people in line.' })
         return this.setState({ people })
@@ -49,7 +49,7 @@ export default class People extends React.Component {
         </div>
         <form onSubmit={(ev) => this.handleAddPerson(ev)}>
           <label htmlFor="name">Enter Name</label>
-          <input type="text" name="name" id="name" required onChange={(ev) => this.setState({ submittedName: ev.target.value })} />
+          <input type="text" name="name" id="name" required placeholder="Enter full name..." onChange={(ev) => this.setState({ submittedName: ev.target.value })} />
           <button type="submit">Add to Queue</button>
         </form>
       </div>

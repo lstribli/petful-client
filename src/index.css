@@ -1,9 +1,18 @@
 html {
   background-color: rgb(46, 46, 46);
 }
+
 img {
   max-width: 300px;
   border-radius: 10px;
+}
+
+p, li {
+  color: white;
+}
+
+label {
+  display: none;
 }
 
 .adoptionWindow {
@@ -28,6 +37,7 @@ img {
   flex-direction: row;
   align-items: flex-start;
   justify-content: center;
+  margin-right: 30%;
 }
 .petsList div {
   display: flex;
