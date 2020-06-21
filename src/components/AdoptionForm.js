@@ -11,6 +11,7 @@ export default class Adoption extends Component {
     fetch(`http://localhost:8000/api/pets`)
       .then((res) => res.json())
       .then((data) => {
+        // console.log(data)
         data.cats.shift()
         data.dogs.shift()
         this.setState({ pets: data, isLoading: false })

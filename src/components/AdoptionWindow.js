@@ -101,7 +101,7 @@ export default class AdoptionWindow extends Component {
           </section>
         </div>
         <div className="people-container">
-          <People />
+          <People adoptDog={this.adoptDog} />
         </div>
       </div >
 

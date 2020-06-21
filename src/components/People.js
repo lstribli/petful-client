@@ -10,16 +10,22 @@ export default class People extends React.Component {
   }
 
   componentDidMount() {
-    fetch('http://localhost:8000/api/people')
-      .then(people => {
-        if (!people) return this.setState({ error: 'There are no people in line.' })
-        return this.setState({ people })
+    this.handleGetPeople();
+  }
+
+  handleGetPeople() {
+    fetch(`http://localhost:8000/api/people`)
+      .then((res) => res.json())
+      .then((data) => {
+        console.log(data)
+        this.setState({ people: data, isLoading: false })
       })
+      .catch(error => console.log(error))
   }
 
   generatePeopleList() {
-    const { people } = this.state
-    if (people.length === 0) {
+    const people = this.state.people
+    if (people.length !== 0) {
       return people.map(person => {
         return <PeopleItem key={person} name={person} />
       })
@@ -27,19 +33,44 @@ export default class People extends React.Component {
     return <p>There is no one else in line!</p>
   }
 
-  handleAddPerson(ev) {
-    ev.preventDefault()
+  handleAddPerson(ev, name) {
     fetch(`http://localhost:8000/api/people`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(this.state.submittedName)
+      body: JSON.stringify({ name })
     })
       .then(res => {
         if (res.error) return this.setState({ error: res.error })
-
       })
+    this.handleGetPeople()
   }
 
+  handleDeletePerson() {
+    fetch(`http://localhost:8000/api/people`, {
+      method: 'DELETE',
+      headers: { 'Content-Type': 'application/json' }
+    })
+    .then()
+  }
+
+  handleDemo() {
+    const step1 = () => {
+      this.handleDeletePerson()
+      this.handleGetPeople()
+      this.props.adoptDog()
+    }
+    const step2 = (name) => {
+      this.handleAddPerson(name)
+    }
+    setTimeout(step1, 5000)
+    setTimeout(step1, 5000)
+    setTimeout(step1, 5000)
+    setTimeout(step2('John'), 5000)
+    setTimeout(step2('Erica'), 5000)
+    setTimeout(step2('Logan'), 5000)
+    setTimeout(step2('Joseph'), 5000)
+    setTimeout(step2('Michael'), 5000)
+  }
   render() {
     if (this.state.isLoading) return <Loading />;
     return (
@@ -47,7 +78,11 @@ export default class People extends React.Component {
         <div className="people-list">
           {this.generatePeopleList()}
         </div>
-        <form onSubmit={(ev) => this.handleAddPerson(ev)}>
+        <form onSubmit={(ev) => {
+          ev.preventDefault()
+          this.handleAddPerson(ev, this.state.submittedName)
+          this.handleDemo()
+        }}>
           <label htmlFor="name">Enter Name</label>
           <input type="text" name="name" id="name" required placeholder="Enter full name..." onChange={(ev) => this.setState({ submittedName: ev.target.value })} />
           <button type="submit">Add to Queue</button>
