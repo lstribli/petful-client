@@ -49,6 +49,16 @@ export default class People extends React.Component {
       .catch(error => console.log(error))
   }
 
+  handleDemo() {
+    //pass delete for both animal and user
+
+
+    //pass add for users after
+
+    //set timer interval
+    setTimeout(fn, 5000)
+
+  }
   render() {
     if (this.state.isLoading) return <Loading />;
     return (
@@ -56,7 +66,10 @@ export default class People extends React.Component {
         <div className="people-list">
           {this.generatePeopleList()}
         </div>
-        <form onSubmit={(ev) => this.handleAddPerson(ev, this.state.submittedName)}>
+        <form onSubmit={(ev) => {
+          this.handleAddPerson(ev, this.state.submittedName)
+          this.handleDemo()
+        }}>
           <label htmlFor="name">Enter Name</label>
           <input type="text" name="name" id="name" required onChange={(ev) => this.setState({ submittedName: ev.target.value })} />
           <button type="submit">Add to Queue</button>
