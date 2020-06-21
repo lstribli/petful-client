@@ -11,15 +11,17 @@ export default class People extends React.Component {
 
   componentDidMount() {
     fetch(`http://localhost:8000/api/people`)
-      .then(people => {
-        if (!people) return this.setState({ error: 'There are no people in line.' })
-        return this.setState({ people })
+      .then((res) => res.json())
+      .then((data) => {
+        console.log(data)
+        this.setState({ people: data, isLoading: false })
       })
+      .catch(error => console.log(error))
   }
 
   generatePeopleList() {
-    const { people } = this.state
-    if (people.length === 0) {
+    const people = this.state.people
+    if (people.length !== 0) {
       return people.map(person => {
         return <PeopleItem key={person} name={person} />
       })
@@ -27,17 +29,24 @@ export default class People extends React.Component {
     return <p>There is no one else in line!</p>
   }
 
-  handleAddPerson(ev) {
+  handleAddPerson(ev, name) {
     ev.preventDefault()
     fetch(`http://localhost:8000/api/people`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(this.state.submittedName)
+      body: JSON.stringify({ name })
     })
       .then(res => {
         if (res.error) return this.setState({ error: res.error })
-
       })
+
+    fetch(`http://localhost:8000/api/people`)
+      .then((res) => res.json())
+      .then((data) => {
+        console.log(data)
+        this.setState({ people: data, isLoading: false })
+      })
+      .catch(error => console.log(error))
   }
 
   render() {
@@ -47,7 +56,7 @@ export default class People extends React.Component {
         <div className="people-list">
           {this.generatePeopleList()}
         </div>
-        <form onSubmit={(ev) => this.handleAddPerson(ev)}>
+        <form onSubmit={(ev) => this.handleAddPerson(ev, this.state.submittedName)}>
           <label htmlFor="name">Enter Name</label>
           <input type="text" name="name" id="name" required onChange={(ev) => this.setState({ submittedName: ev.target.value })} />
           <button type="submit">Add to Queue</button>
