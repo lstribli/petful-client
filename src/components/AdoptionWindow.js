@@ -60,7 +60,6 @@ export default class AdoptionWindow extends Component {
       }
     })
       .then((res) => {
-        // console.log(this.state)
         let newVar = this.state.adoptCat;
         this.setState({ adoptCat: newVar })
         window.location.reload(false)
@@ -73,6 +72,13 @@ export default class AdoptionWindow extends Component {
     if (this.state.isLoading) return <Loading />;
     return (
       <div className="adoptionWindow-container">
+        <header className="adoption-header">
+          <h2>Want to Adopt?</h2>
+          <p>
+            We work on a first come first serve basis, for both the adoptors and adoptees. Enter your next to be next in line
+            and when your name is up, we'll show you the next dogs or cats available for adoption!
+          </p>
+        </header>
         <div className="adoptionWindow">
           <section>
             <ul className="adoptThis">
@@ -104,9 +110,6 @@ export default class AdoptionWindow extends Component {
           <People adoptDog={this.adoptDog} />
         </div>
       </div >
-
-
-
     )
   }
 }

@@ -93,3 +93,12 @@ label {
   top: 0;
   width: 30%;
 }
+
+.adoption-header {
+  color: #ffffff;
+  font-size: 1.6rem;
+  width: 50%;
+  text-align: center;
+  display: inline-block;
+  margin: 0 auto 0 120px;
+}
