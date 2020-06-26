@@ -83,7 +83,7 @@ export default class People extends React.Component {
     setTimeout(step2('Michael'), 45000)
   }
   render() {
-    if (this.state.isLoading) return <Loading />;
+    // if (this.state.isLoading) return <Loading />;
     return (
       <div className="people-container">
         {/* <div className="people-list">

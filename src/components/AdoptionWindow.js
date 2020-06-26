@@ -119,25 +119,27 @@ export default class AdoptionWindow extends Component {
       })
       .catch(error => console.log(error))
   }
-  handleDemo() {
-    const step1 = () => {
-      this.handleDeletePerson()
-      this.handleGetPeople()
-      this.adoptDog()
-    }
-    const step2 = (name) => {
-      this.handleAddPerson2(name)
-    }
-    setTimeout(step1, 5000)
-    setTimeout(step1, 10000)
-    setTimeout(step1, 15000)
-    setTimeout(step1, 20000)
-    setTimeout(step2('John'), 25000)
-    setTimeout(step2('Erica'), 30000)
-    setTimeout(step2('Logan'), 35000)
-    setTimeout(step2('Joseph'), 40000)
-    setTimeout(step2('Michael'), 45000)
+  step2 = (name) => {
+    this.handleAddPerson2(name)
   }
+  step1 = (ev) => {
+    ev.preventDefault();
+    this.handleDeletePerson()
+    // this.handleGetPeople()
+    this.adoptDog()
+    console.log('we did the thing')
+  }
+
+  handleDemo(ev) {
+    ev.preventDefault();
+    if (this.state.submittedName !== this.state.people[0]) {
+      this.interval = setInterval(this.step1(ev), 5000)
+    }
+    if (this.state.submittedName === this.state.people[0]) {
+      clearInterval(this.interval)
+    }
+  }
+
   handleDeletePerson() {
     fetch(`http://localhost:8000/api/people`, {
       method: 'DELETE',
@@ -146,7 +148,6 @@ export default class AdoptionWindow extends Component {
       .then()
   }
   render() {
-
     if (this.state.isLoading) return <Loading />;
     return (
       <section className="adoptionPage">
@@ -191,10 +192,12 @@ export default class AdoptionWindow extends Component {
           <div className="people-list">
             {this.generatePeopleList()}
           </div>
+
+
           <form onSubmit={(ev) => {
             ev.preventDefault()
             this.handleAddPerson(ev, this.state.submittedName)
-            this.handleDemo()
+            this.handleDemo(ev, this.state.submittedName)
           }}>
             <label htmlFor="name">Enter Name</label>
             <input type="text" name="name" id="name" required placeholder="Enter full name..." onChange={(ev) => this.setState({ submittedName: ev.target.value })} />
