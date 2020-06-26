@@ -44,13 +44,23 @@ export default class People extends React.Component {
       })
     this.handleGetPeople()
   }
-
+  handleAddPerson2(name) {
+    fetch(`http://localhost:8000/api/people`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ name })
+    })
+      .then(res => {
+        if (res.error) return this.setState({ error: res.error })
+      })
+    this.handleGetPeople()
+  }
   handleDeletePerson() {
     fetch(`http://localhost:8000/api/people`, {
       method: 'DELETE',
       headers: { 'Content-Type': 'application/json' }
     })
-    .then()
+      .then()
   }
 
   handleDemo() {
@@ -60,22 +70,23 @@ export default class People extends React.Component {
       this.props.adoptDog()
     }
     const step2 = (name) => {
-      this.handleAddPerson(name)
+      this.handleAddPerson2(name)
     }
     setTimeout(step1, 5000)
-    setTimeout(step1, 5000)
-    setTimeout(step1, 5000)
-    setTimeout(step2('John'), 5000)
-    setTimeout(step2('Erica'), 5000)
-    setTimeout(step2('Logan'), 5000)
-    setTimeout(step2('Joseph'), 5000)
-    setTimeout(step2('Michael'), 5000)
+    setTimeout(step1, 10000)
+    setTimeout(step1, 15000)
+    setTimeout(step1, 20000)
+    setTimeout(step2('John'), 25000)
+    setTimeout(step2('Erica'), 30000)
+    setTimeout(step2('Logan'), 35000)
+    setTimeout(step2('Joseph'), 40000)
+    setTimeout(step2('Michael'), 45000)
   }
   render() {
     if (this.state.isLoading) return <Loading />;
     return (
       <div className="people-container">
-        <div className="people-list">
+        {/* <div className="people-list">
           {this.generatePeopleList()}
         </div>
         <form onSubmit={(ev) => {
@@ -85,8 +96,10 @@ export default class People extends React.Component {
         }}>
           <label htmlFor="name">Enter Name</label>
           <input type="text" name="name" id="name" required placeholder="Enter full name..." onChange={(ev) => this.setState({ submittedName: ev.target.value })} />
+
+
           <button type="submit">Add to Queue</button>
-        </form>
+        </form> */}
       </div>
     )
   }
