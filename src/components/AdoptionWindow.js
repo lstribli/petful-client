@@ -46,6 +46,11 @@ export default class AdoptionWindow extends Component {
 
   }
 
+  componentDidUpdate() {
+    if (this.state.submittedName === this.state.people[0]) {
+      clearInterval(this.interval)
+    }
+  }
   adoptDog() {
     fetch(`http://localhost:8000/api/pets/dogs`, {
       method: 'DELETE',
@@ -56,7 +61,7 @@ export default class AdoptionWindow extends Component {
       .then((res) => {
         let newVar = this.state.adoptDog;
         this.setState({ adoptDog: newVar })
-        window.location.reload(false)
+
       })
       .catch(error => console.log(error))
   }
@@ -74,7 +79,7 @@ export default class AdoptionWindow extends Component {
         // console.log(this.state)
         let newVar = this.state.adoptCat;
         this.setState({ adoptCat: newVar })
-        window.location.reload(false)
+
       })
       .catch(error => console.log(error))
   }
@@ -88,28 +93,36 @@ export default class AdoptionWindow extends Component {
     }
     return <p>There is no one else in line!</p>
   }
-  handleAddPerson(ev, name) {
-    fetch(`http://localhost:8000/api/people`, {
+  handleAddPerson = () => {
+    fetch('http://localhost:8000/api/people', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ name })
+      body: JSON.stringify({ name: this.state.submittedName })
     })
       .then(res => {
-        if (res.error) return this.setState({ error: res.error })
+        if (!res.ok) {
+          return res.json().then(e => Promise.reject(e))
+        }
+        return res.json()
       })
-    this.handleGetPeople()
-  }
-  handleAddPerson2(name) {
-    fetch(`http://localhost:8000/api/people`, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ name })
-    })
       .then(res => {
-        if (res.error) return this.setState({ error: res.error })
+        this.setState({
+          people: [...this.state.people, res.name]
+        })
       })
-    this.handleGetPeople()
+      .catch(error => console.log(error))
   }
+  // handleAddPerson2(name) {
+  //   fetch(`http://localhost:8000/api/people`, {
+  //     method: 'POST',
+  //     headers: { 'Content-Type': 'application/json' },
+  //     body: JSON.stringify({ name })
+  //   })
+  //     .then(res => {
+  //       if (res.error) return this.setState({ error: res.error })
+  //     })
+  //   this.handleGetPeople()
+  // }
   handleGetPeople() {
     fetch(`http://localhost:8000/api/people`)
       .then((res) => res.json())
@@ -122,21 +135,16 @@ export default class AdoptionWindow extends Component {
   step2 = (name) => {
     this.handleAddPerson2(name)
   }
-  step1 = (ev) => {
-    ev.preventDefault();
+  step1 = () => {
     this.handleDeletePerson()
     // this.handleGetPeople()
     this.adoptDog()
     console.log('we did the thing')
   }
 
-  handleDemo(ev) {
-    ev.preventDefault();
+  handleDemo = () => {
     if (this.state.submittedName !== this.state.people[0]) {
-      this.interval = setInterval(this.step1(ev), 5000)
-    }
-    if (this.state.submittedName === this.state.people[0]) {
-      clearInterval(this.interval)
+      this.interval = setInterval(this.step1(), 1000)
     }
   }
 
@@ -145,7 +153,16 @@ export default class AdoptionWindow extends Component {
       method: 'DELETE',
       headers: { 'Content-Type': 'application/json' }
     })
-      .then()
+      .then(res => {
+        if (!res.ok) {
+          return res.json().then(e => Promise.reject(e))
+        }
+        return res.json()
+      })
+      .then(res => {
+        this.setState({ people: [...res.remaining] })
+      })
+      .catch(error => console.log(error))
   }
   render() {
     if (this.state.isLoading) return <Loading />;
@@ -182,6 +199,7 @@ export default class AdoptionWindow extends Component {
               {
                 (this.state.submittedName === this.state.people[0]) && <button onClick={() => this.adoptDog()}>Adopt This Dog</button>
               }
+              <button onClick={() => this.adoptDog()}>Adopt This Dog</button>
             </section>
           </div>
           <div className="people-container">
@@ -196,8 +214,8 @@ export default class AdoptionWindow extends Component {
 
           <form onSubmit={(ev) => {
             ev.preventDefault()
-            this.handleAddPerson(ev, this.state.submittedName)
-            this.handleDemo(ev, this.state.submittedName)
+            this.handleAddPerson()
+            this.handleDemo()
           }}>
             <label htmlFor="name">Enter Name</label>
             <input type="text" name="name" id="name" required placeholder="Enter full name..." onChange={(ev) => this.setState({ submittedName: ev.target.value })} />
